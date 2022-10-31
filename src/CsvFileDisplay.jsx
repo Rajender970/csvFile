@@ -10,7 +10,7 @@ function CsvFileDisplay({
   getData,
   getSearchData
 }) {
-  const [csvData, setCsvData] = useState();
+  const [csvData, setCsvData] = useState(null);
 
   const [search, setSearch] = useState("");
 
@@ -31,21 +31,25 @@ function CsvFileDisplay({
     getData(newArray.slice(1));
   };
   const getCsvDataFile = (e) => {
-    const file = csvData;
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const text = e.target.result;
+    console.log("csv data : ", csvData);
+    if (csvData === null) {
+      alert("Please select csv File");
+    } else {
+      const file = csvData;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const text = e.target.result;
 
-      processCsvFile(text);
-    };
-    reader.readAsText(file);
+        processCsvFile(text);
+      };
+      reader.readAsText(file);
+    }
   };
   const dataSearch = () => {
-    let d = storedata.filter((f) => f.name === search);
-    if (d.length == 0) {
-      alert("No record found");
-    }
-    getSearchData(d);
+    let d = storedata.filter((f) => f.name === search.trim());
+    if (d.length === 0) {
+      alert("Please enter any valid name");
+    } else getSearchData(d);
   };
   useEffect(() => {}, []);
   return (
@@ -90,3 +94,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CsvFileDisplay);
+q
